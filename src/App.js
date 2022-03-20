@@ -37,7 +37,6 @@ let App = () => {
     setItems(2)
   }
   
-
   let AddItem = ()  => {
       setItems(items+1);
       let arr = [];
@@ -53,11 +52,12 @@ let App = () => {
       setItems(2);
   }
 
-
   if (condition == "1"){
     return (
       <div>
+        <input type="checkbox" name="" />
         <div className='fullsizewrapper'>
+          
           <div className='form-wrapper'>
             <div className='form'>
               <h1>Регистрация</h1>
@@ -83,6 +83,7 @@ let App = () => {
   if (condition == "2"){
     return(
       <div>
+        <input type="checkbox" name="" />
       <div className='fullsizewrapper'>
         <div className='form-wrapper'>
           <div className='form'>
@@ -106,7 +107,10 @@ let App = () => {
     ) 
   } else if (condition == 3){
       return(
-        <div className='wrapper'>
+        <div>
+          <input type="checkbox" name="" />
+          <div className='wrapper'>
+          
           <div className='lists-container'>
             <div className='user-list'>
               <h1>Ваши книги</h1>
@@ -126,10 +130,15 @@ let App = () => {
             </div>
           </div>
         </div>
+        </div>
+        
       )
   } else if (condition == 4){
       return(
+        <div>
+        <input type="checkbox" name=""/>
         <div className='wrapper'>
+          
           <div className='manual-input-container'>
             <h1>Добавление ваших книг в список</h1>
               {manualInput.map( (item) => <Input id={item} rolelist={rolelist}/>)}
@@ -139,6 +148,7 @@ let App = () => {
                 <input className="btn" type="button" value="Сохранить" onClick={manualUpload} />
               </div>
           </div>
+        </div>
         </div>
       )
   } else{
