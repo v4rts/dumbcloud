@@ -1,0 +1,31 @@
+.form-inputs-wrapper{
+    width: 100%;
+    border: 2px solid black;
+    border-radius: 10px;
+    margin-bottom: 13px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.xbutton{
+    background-color: white;
+    outline: none;
+    border: 2px solid rgb(107, 107, 107);
+    border-radius: 50px;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 5px 10px 5px 10px;
+    transition: 0.5s;
+    margin-left: 2%;
+
+}
+
+.xbutton:hover{
+    background-color: black;
+    color: white;
+    outline: none;
+    border: 2px solid black;
+    border-radius: 50px;
+    font-size: 14px;
+    cursor: pointer;
+}

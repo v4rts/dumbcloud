@@ -1,38 +1,173 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+*{
+    font-family: 'Montserrat', sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.wrapper{
+  display: flex;
+  width: 100vw;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.fullsizewrapper{
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.form-wrapper{
+  display: flex;
+  width: 500px;
+  height: 380px;
+  border: 2px solid rgb(145, 145, 145);
+  border-radius: 20px;
+  flex-direction: column;
+  align-items: center;
+  transition: 1s;
+  background: white;
+}
+
+.form-wrapper:hover{
+  display: flex;
+  width: 500px;
+  height: 380px;
+  border: 2px solid rgb(95, 95, 95);
+  border-radius: 20px;
+  flex-direction: column;
+  align-items: center;
+  transform: scale(1.05);
+  transition: 2s;
+}
+
+.label-wrapper{
+  width: 100%;
+}
+
+.btn{
+  background-color: white;
+  outline: none;
+  border: 2px solid rgb(107, 107, 107);
+  border-radius: 50px;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 10px 35px 10px 35px;
+  transition: 0.5s;
+}
+
+.btn:hover{
+  background-color: black;
+  color: white;
+  outline: none;
+  border: 2px solid black;
+  border-radius: 50px;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 10px 35px 10px 35px;
+}
+
+.form-btns-container{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 50px;
+}
+
+.center{
+  justify-content: center !important; 
+}
+
+.form-input{
+  border-radius: 2px;
+  outline: none;
+  width: 100%;
+  border: 1px solid rgb(156, 156, 156);
+  height: 30px;
+  font-size: 14px;
+}
+
+.password{
+  -webkit-text-security: square;
+}
+
+.form{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 75%;
+  height: 100%;
+}
+
+.lists-container{
+  width: 80%;
+  height: 100vh;
+  display: flex;
+}
+
+.user-list{
+  margin-top: 10%;
+  width: 50%;
+  margin-right: 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;;
+}
+
+.recommended-list{
+  margin-top: 10%;
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;;
+}
+
+.list-item{
+  width: 100%;
+  height: 37px;
+  margin-bottom: 20px;
+  border: 2px solid rgb(80, 80, 80);
+  border-radius: 5px;
+}
+
+.user-list-item{
+
+}
+
+.recommended-list-item{
+
+}
+
+.container{
+  width: 80%;
+  margin-top: -20px;
+}
+
+.manual-input-container{
+  padding-top: 10%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 70%;
+  height: auto;
+}
+
+.del5{
+  width: 16%;
+  margin-left: 2%;
+}
+
+.manual-input-btns{
+  margin-top: 40px;
+  width: 100%;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.interval{
+  width: 5%;
 }
