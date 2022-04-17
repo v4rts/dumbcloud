@@ -9,20 +9,66 @@ let App = () => {
   const [items, setItems] = useState(2);
   const [rolelist, setRolelist] = useState([]);
 
+  const [reglogin, setReglogin] = useState("")
+  const [regpass, setRegpass]= useState("")
+  const [inlogin, setInlogin] = useState("")
+  const [inpass, setInpass] = useState("")
+
   let signInRedirect = () => {
     setCondition("2");
   }
 
-  let signUp = () => {
-    setCondition("3");
+  let signUp = async e => {
+    if (reglogin != "" && regpass != "") {
+
+      let regexp = /^[a-z\d]+$/i;
+      if (regexp.test(String(reglogin)) && regexp.test(String(regpass))) {
+        if (String(reglogin).length < 24 && String(reglogin).length > 8 && String(regpass).length < 24 && String(regpass).length > 8){
+          
+          fetch('http://127.1:8080/api/v1/register', {method: 'POST', headers: {
+            'Content-Type': 'application/json'}, body: JSON.stringify({"user": reglogin, "password": regpass})})
+          .then(response => response.json())
+          .then(result => {
+
+            console.log(result); // debug
+        })
+
+        } else {
+          alert("Пароль и логин должны быть не менее 8 символов и не более 24");
+        }
+      } else {
+        alert("Пожалуйста используйте только латинские буквы и цифры");
+      }
+    }else{
+      alert("Поля не могут быть пустыми!");
+    }
+
+ 
   }
 
   let signIn = () => {
-    setCondition("3")
+    if (inlogin != "" && inpass != "") {
+
+      let regexp = /^[a-z\d]+$/i;
+      if (regexp.test(String(inlogin)) && regexp.test(String(inpass))) {
+        if (String(inlogin).length < 24 && String(inlogin).length > 8 && String(inpass).length < 24 && String(inpass).length > 8){
+          setCondition("3");
+          alert("Успешный вход");
+        } else {
+          alert("Пароль и логин должны быть не менее 8 символов и не более 24");
+        }
+      } else {
+        alert("Пожалуйста используйте только латинские буквы и цифры");
+      }
+    }else{
+      alert("Поля не могут быть пустыми!");
+    }
   }
 
   let deleteList = () => {
+    alert("Список успешно удален")
     setCondition("3")
+
   }
 
   let addBooks = () => {
@@ -31,6 +77,9 @@ let App = () => {
 
   let addItem_flag = 1;
 
+  let goBack = () => {
+    setCondition(String(condition-1))
+  }
 
   let manualUpload = () => {
     setCondition("3")
@@ -55,7 +104,6 @@ let App = () => {
   if (condition == "1"){
     return (
       <div>
-        <input type="checkbox" name="" />
         <div className='fullsizewrapper'>
           
           <div className='form-wrapper'>
@@ -64,11 +112,11 @@ let App = () => {
               <div className='label-wrapper'>
                 <p>Логин</p>
               </div>      
-              <input className='form-input' type="text" size="10" placeholder="8-24 символов"/>
+              <input onInput={e => setReglogin(e.target.value)} className='form-input' type="text" size="10" placeholder="8-24 символов"/>
               <div className='label-wrapper'>
                 <p>Пароль</p>
               </div> 
-              <input className='password form-input' size="14" placeholder="8-24 символов"/>
+              <input onInput={e => setRegpass(e.target.value)} className='password form-input' size="14" placeholder="8-24 символов"/>
               <div className='form-btns-container'>
                 <input className='btn' type="button" onClick={signInRedirect} value="Войти"/>
                 <input className='btn' type="button" onClick={signUp} value="Зарегистрироваться"/>
@@ -83,7 +131,7 @@ let App = () => {
   if (condition == "2"){
     return(
       <div>
-        <input type="checkbox" name="" />
+        <input type="image" onClick={goBack} src="https://cdn-icons-png.flaticon.com/512/2223/2223615.png" className='back-button'></input>
       <div className='fullsizewrapper'>
         <div className='form-wrapper'>
           <div className='form'>
@@ -91,11 +139,11 @@ let App = () => {
             <div className='label-wrapper'>
               <p>Логин</p>
             </div>      
-            <input className='form-input' type="text" size="10" placeholder="8-24 символов"/>
+            <input onInput={e => setInlogin(e.target.value)} className='form-input' type="text" size="10" placeholder="8-24 символов"/>
             <div className='label-wrapper'>
               <p>Пароль</p>
             </div> 
-            <input className='password form-input' size="14" placeholder="8-24 символов"/>
+            <input onInput={e => setInpass(e.target.value)} className='password form-input' size="14" placeholder="8-24 символов"/>
             <div className='center form-btns-container'>
               <input className='btn' type="button" onClick={signIn} value="Войти"/>
             </div>
@@ -108,7 +156,7 @@ let App = () => {
   } else if (condition == 3){
       return(
         <div>
-          <input type="checkbox" name="" />
+          <input type="image" onClick={goBack} src="https://cdn-icons-png.flaticon.com/512/2223/2223615.png" className='back-button'></input>
           <div className='wrapper'>
           
           <div className='lists-container'>
@@ -136,7 +184,7 @@ let App = () => {
   } else if (condition == 4){
       return(
         <div>
-        <input type="checkbox" name=""/>
+          <input type="image" onClick={goBack} src="https://cdn-icons-png.flaticon.com/512/2223/2223615.png" className='back-button'></input>
         <div className='wrapper'>
           
           <div className='manual-input-container'>

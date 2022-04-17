@@ -175,3 +175,13 @@
 .interval{
   width: 5%;
 }
+
+.back-button{
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  outline:none;
+  height: 50px;
+  width: 50px;
+  cursor: pointer;
+}
