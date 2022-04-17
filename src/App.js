@@ -9,13 +9,31 @@ let App = () => {
   const [items, setItems] = useState(2);
   const [rolelist, setRolelist] = useState([]);
 
-  const [reglogin, setReglogin] = useState("")
-  const [regpass, setRegpass]= useState("")
-  const [inlogin, setInlogin] = useState("")
-  const [inpass, setInpass] = useState("")
+  const [reglogin, setReglogin] = useState("");
+  const [regpass, setRegpass]= useState("");
+  const [inlogin, setInlogin] = useState("");
+  const [inpass, setInpass] = useState("");
+  const [allbooks, setAllbooks] = useState([]);
+
+  const [savebooks, setSavebooks] = useState([]);
+  const [token, setToken] = useState("");
+
+  const [mybooks, setMybooks] = useState([]);
+  const [recomendations, setRecomendations] = useState([]);
+
+  const url = 'http://127.1:8080/';
 
   let signInRedirect = () => {
     setCondition("2");
+  }
+
+  async function getAllBooks(token) {
+    fetch(url+'api/v1/pubic/get-books', {method: 'POST', body: JSON.stringify({"user": inlogin, "token": token})})
+    .then(response => response.json())
+    .then(result => {
+      console.log(result); // debug
+      setAllbooks(result.book_list);
+    })
   }
 
   let signUp = async e => {
@@ -23,14 +41,19 @@ let App = () => {
 
       let regexp = /^[a-z\d]+$/i;
       if (regexp.test(String(reglogin)) && regexp.test(String(regpass))) {
-        if (String(reglogin).length < 24 && String(reglogin).length > 8 && String(regpass).length < 24 && String(regpass).length > 8){
+        if (String(reglogin).length <= 24 && String(reglogin).length >= 8 && String(regpass).length <= 24 && String(regpass).length > 8){
           
-          fetch('http://127.1:8080/api/v1/register', {method: 'POST', headers: {
-            'Content-Type': 'application/json'}, body: JSON.stringify({"user": reglogin, "password": regpass})})
+          fetch(url+'api/v1/register', {method: 'POST', body: JSON.stringify({"user": reglogin, "password": regpass})})
           .then(response => response.json())
           .then(result => {
-
             console.log(result); // debug
+            if (result.status == "ok"){
+              alert(result.msg)
+              setCondition("2")
+            } else {
+              alert(result.msg)
+            }
+
         })
 
         } else {
@@ -51,9 +74,26 @@ let App = () => {
 
       let regexp = /^[a-z\d]+$/i;
       if (regexp.test(String(inlogin)) && regexp.test(String(inpass))) {
-        if (String(inlogin).length < 24 && String(inlogin).length > 8 && String(inpass).length < 24 && String(inpass).length > 8){
-          setCondition("3");
-          alert("Успешный вход");
+        if (String(inlogin).length <= 24 && String(inlogin).length >= 8 && String(inpass).length <= 24 && String(inpass).length > 8){
+          
+          fetch(url+'api/v1/login', {method: 'POST', body: JSON.stringify({"user": inlogin, "password": inpass})})
+          .then(response => response.json())
+          .then(result => {
+            console.log(result); // debug
+            if (result.status == "ok"){
+              setToken(result.cookie);
+              alert(result.msg);
+              console.log(result.cookie);
+              getAllBooks(result.cookie);
+              getUserBooks(result.cookie);
+              getRecomendations(result.cookie);
+              setCondition("3");
+
+            } else {
+              alert(result.msg);
+            }
+          })
+
         } else {
           alert("Пароль и логин должны быть не менее 8 символов и не более 24");
         }
@@ -68,7 +108,6 @@ let App = () => {
   let deleteList = () => {
     alert("Список успешно удален")
     setCondition("3")
-
   }
 
   let addBooks = () => {
@@ -81,7 +120,55 @@ let App = () => {
     setCondition(String(condition-1))
   }
 
-  let manualUpload = () => {
+  async function getUserBooks(token) {
+    fetch(url+'api/v1/my/get-books', {method: 'POST', body: JSON.stringify({"user": inlogin, "token": token})})
+    .then(response => response.json())
+    .then(result => {
+      console.log(result); // debug
+      setMybooks(result.book_list);
+    })
+  }
+
+  async function getRecomendations(token) {
+    fetch(url+'api/v1/my/get-recomendations', {method: 'POST', body: JSON.stringify({"user": inlogin, "token": token})})
+    .then(response => response.json())
+    .then(result => {
+      console.log(result); // debug
+      setRecomendations(result.recomendation);
+    })
+  }
+
+  let deleteAllbooks = async e => {
+    fetch(url+'api/v1/my/delete-books', {method: 'DELETE', body: JSON.stringify({"user": inlogin, "token": token})})
+    .then(response => response.json())
+    .then(result => {
+      console.log(result); // debug
+      getUserBooks(token)
+    })
+  }
+  
+  let manualUpload = async e => {
+    let sendarr = [];
+
+    allbooks.forEach(element => {
+      savebooks.forEach(element2 => {
+        if ((element.BookName+", "+element.AuthorName) == element2.book){
+            console.log({"BookID" :element.BookID, "Score":element2.score});
+            sendarr.push({"BookID" :element.BookID, "Score":Number(element2.score)})
+        }
+      })
+    })
+    fetch(url+'api/v1/my/add-book', {method: 'PUT', body: JSON.stringify({"user": inlogin, "token": token, "BookSlice": sendarr})})
+    .then(response => response.json())
+    .then(result => {
+      console.log(result); // debug
+      sendarr = [];
+      setSavebooks([]);
+
+      getUserBooks(token);
+      getRecomendations(token);
+    })
+
     setCondition("3")
     setItems(2)
   }
@@ -162,19 +249,24 @@ let App = () => {
           <div className='lists-container'>
             <div className='user-list'>
               <h1>Ваши книги</h1>
-              <div className='list-item user-list-item'></div>
-              <div className='list-item user-list-item'></div>
-              <div className='list-item user-list-item'></div>
+              {mybooks.map( (item) => <div className='list-item user-list-item'>
+                <span>{item.AuthorName}, {item.BookName}</span>
+              </div>)}
+
+
               <div className='container'>
                 <div className='form-btns-container'>
-                  <input className='btn' type="button" onClick={deleteList} value="Удалить список"/>
+                  <input className='btn' type="button" onClick={deleteAllbooks} value="Удалить список"/>
                   <input className='btn' type="button" onClick={addBooks} value="Добавить книгу"/>
                 </div>
               </div>
             </div>
             <div className='recommended-list'>
               <h1>Рекомендуем прочитать</h1>
-              <div className='list-item recommended-list-item'></div>
+              {recomendations.map( (item) => <div className='list-item recommended-list-item'>
+                <span>{item.AuthorName}, {item.BookName}</span>
+              </div>)}
+              
             </div>
           </div>
         </div>
@@ -189,7 +281,7 @@ let App = () => {
           
           <div className='manual-input-container'>
             <h1>Добавление ваших книг в список</h1>
-              {manualInput.map( (item) => <Input id={item} rolelist={rolelist}/>)}
+              {manualInput.map( (item) => <Input id={item} savebooks={savebooks} setSavebooks={setSavebooks} rolelist={allbooks}/>)}
               <div className="manual-input-btns">
                 <input className="btn" type="button" value="Добавить книгу" onClick={AddItem} id="add"/>
                 <div className='interval'></div>
